@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Chowk by Prathomix | Master Pitch Prototype</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: {
+                        brand: { 50: '#eff6ff', 500: '#3b82f6', 600: '#2563eb', 900: '#0f172a' },
+                        success: { 500: '#10b981', 600: '#059669' },
+                        accent: { 500: '#f59e0b' }
+                    },
+                    animation: {
+                        'wave': 'wave 1.5s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.4s ease-out forwards',
+                        'slide-up': 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                    },
+                    keyframes: {
+                        wave: {
+                            '0%, 100%': { transform: 'scaleY(0.5)', opacity: '0.5' },
+                            '50%': { transform: 'scaleY(1.5)', opacity: '1' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(100%)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { background: #0f172a; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .glass-panel { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+        .glass-dark { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.1); }
+        
+        /* Audio Wave Bars */
+        .bar { width: 4px; background-color: white; border-radius: 4px; display: inline-block; margin: 0 2px; }
+        .bar:nth-child(1) { animation-delay: 0.1s; }
+        .bar:nth-child(2) { animation-delay: 0.3s; }
+        .bar:nth-child(3) { animation-delay: 0.0s; }
+        .bar:nth-child(4) { animation-delay: 0.4s; }
+        .bar:nth-child(5) { animation-delay: 0.2s; }
+    </style>
+</head>
+<body class="antialiased text-slate-800">
+
+    <div class="w-[390px] h-[844px] bg-[#f8fafc] rounded-[55px] shadow-[0_0_80px_rgba(59,130,246,0.3)] border-[14px] border-slate-900 relative overflow-hidden flex flex-col">
+        
+        <div class="absolute top-3 left-1/2 -translate-x-1/2 w-[120px] h-[35px] bg-black rounded-full z-[100] flex justify-between items-center px-4">
+            <div id="status-dot" class="w-2 h-2 rounded-full bg-emerald-500 opacity-0 transition-opacity"></div>
+            <div class="w-3 h-3 rounded-full bg-[#1a1a1a]"></div>
+        </div>
+
+        <div id="splash-screen" class="absolute inset-0 bg-brand-900 z-[200] flex flex-col items-center justify-center transition-opacity duration-500">
+            <div class="w-24 h-24 bg-brand-500 rounded-3xl flex items-center justify-center shadow-[0_0_50px_rgba(59,130,246,0.5)] mb-6">
+                <i data-lucide="hard-hat" class="text-white w-12 h-12"></i>
+            </div>
+            <h1 class="text-4xl font-extrabold text-white tracking-tight">E-Chowk</h1>
+            <p class="text-brand-400 font-medium tracking-widest uppercase text-xs mt-2">By Prathomix</p>
+            <div class="absolute bottom-12 flex space-x-2">
+                <div class="w-2 h-2 bg-brand-500 rounded-full animate-bounce"></div>
+                <div class="w-2 h-2 bg-brand-500 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                <div class="w-2 h-2 bg-brand-500 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+            </div>
+        </div>
+
+        <header class="pt-14 pb-3 px-5 glass-panel z-40 shrink-0 border-b border-slate-200">
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <h2 class="text-xl font-extrabold text-slate-900 leading-none">E-Chowk</h2>
+                    <span class="text-[9px] font-bold text-success-600 bg-success-50 px-1.5 py-0.5 rounded-sm uppercase tracking-wider">Jaipur Zone Active</span>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="showToast('Language changed to Hindi')" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-xs text-slate-700 active:scale-95 transition-transform">अ</button>
+                    <button onclick="showToast('No new notifications')" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 active:scale-95 transition-transform relative">
+                        <i data-lucide="bell" class="w-4 h-4"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-slate-100 p-1 rounded-2xl flex relative shadow-inner">
+                <div id="role-slider" class="absolute left-1 top-1 bottom-1 w-[calc(50%-4px)] bg-white rounded-xl shadow-md transition-transform duration-300 ease-out"></div>
+                <button onclick="switchRole('worker')" id="btn-worker" class="flex-1 py-2.5 text-xs font-extrabold text-brand-900 z-10 transition-colors">My Chowk</button>
+                <button onclick="switchRole('hirer')" id="btn-hirer" class="flex-1 py-2.5 text-xs font-extrabold text-slate-400 z-10 transition-colors">Contractor Panel</button>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto no-scrollbar pb-28 relative bg-slate-50" id="main-scroll">
+            
+            <div id="screen-worker-home" class="px-5 pt-5 space-y-5 animate-fade-in block">
+                
+                <div class="bg-gradient-to-br from-slate-900 to-brand-900 rounded-[28px] p-6 text-white shadow-xl relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 w-32 h-32 bg-brand-500 rounded-full blur-3xl opacity-40"></div>
+                    <div class="flex justify-between items-center mb-6 relative z-10">
+                        <div class="flex items-center gap-3">
+                            <img src="https://i.pravatar.cc/150?img=11" class="w-12 h-12 rounded-full border-2 border-white/20">
+                            <div>
+                                <p class="text-white/70 text-[10px] uppercase tracking-wider font-semibold">Namaste,</p>
+                                <h3 class="font-bold text-lg leading-tight">Pratham Bhai</h3>
+                            </div>
+                        </div>
+                        <i data-lucide="qr-code" class="w-6 h-6 text-white/50" onclick="showToast('Showing QR Code for payment...')"></i>
+                    </div>
+                    
+                    <div class="bg-white/10 rounded-2xl p-4 backdrop-blur-sm border border-white/10 flex justify-between items-end">
+                        <div>
+                            <p class="text-white/60 text-[10px] uppercase font-bold tracking-widest mb-1">Digital Khata</p>
+                            <h2 class="text-3xl font-extrabold text-white">₹850<span class="text-base text-white/50 font-semibold">.00</span></h2>
+                        </div>
+                        <button onclick="openWithdrawModal()" class="bg-white text-slate-900 px-4 py-2 rounded-xl text-xs font-extrabold shadow-lg active:scale-95 transition-transform">Withdraw</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-[28px] p-6 border border-slate-200 shadow-sm text-center">
+                    <p class="text-xs font-extrabold text-slate-400 uppercase tracking-widest mb-5">Gen AI Job Matcher</p>
+                    
+                    <div class="relative w-28 h-28 mx-auto flex items-center justify-center mb-4">
+                        <div id="mic-ripple-1" class="absolute inset-0 border border-brand-400 rounded-full opacity-0 transition-all duration-500 scale-50"></div>
+                        <div id="mic-ripple-2" class="absolute inset-0 border border-brand-400 rounded-full opacity-0 transition-all duration-500 scale-50" style="transition-delay: 100ms"></div>
+                        
+                        <button id="ai-mic" onclick="activateAIPitch()" class="relative w-20 h-20 bg-brand-600 rounded-full flex justify-center items-center shadow-[0_10px_30px_rgba(37,99,235,0.4)] z-10 active:scale-95 transition-all duration-300">
+                            <i data-lucide="mic" id="mic-icon" class="w-8 h-8 text-white"></i>
+                            
+                            <div id="sound-waves" class="hidden absolute inset-0 flex items-center justify-center gap-[2px]">
+                                <div class="bar h-3 animate-wave"></div>
+                                <div class="bar h-6 animate-wave"></div>
+                                <div class="bar h-8 animate-wave"></div>
+                                <div class="bar h-5 animate-wave"></div>
+                                <div class="bar h-3 animate-wave"></div>
+                            </div>
+                        </button>
+                    </div>
+                    
+                    <h3 id="ai-status" class="text-lg font-extrabold text-slate-900">Tap & Speak</h3>
+                    <p id="ai-subtext" class="text-xs text-slate-500 font-medium mt-1">"Mujhe site par tile lagane ka kaam chahiye"</p>
+
+                    <div id="llm-json-box" class="hidden mt-4 text-left bg-slate-50 border border-slate-200 rounded-xl p-3">
+                        <div class="flex items-center gap-1.5 mb-2">
+                            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-brand-600"></i>
+                            <span class="text-[9px] font-extrabold text-slate-700 uppercase tracking-widest">LLM Intent Parsed</span>
+                        </div>
+                        <pre class="text-[9px] font-mono text-slate-600 overflow-hidden">{"intent": "find_job", "skill": "Tiles/Marble", "urgency": "High"}</pre>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-extrabold text-sm text-slate-900 mb-3 px-1">Local Updates</h3>
+                    <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex items-start gap-4 active:bg-slate-50 transition-colors" onclick="showToast('Playing audio announcement...')">
+                        <div class="bg-orange-100 p-2.5 rounded-xl text-orange-600 shrink-0">
+                            <i data-lucide="cloud-rain" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-0.5">
+                                <h4 class="font-bold text-sm text-slate-900">Weather Alert</h4>
+                                <i data-lucide="volume-2" class="w-3.5 h-3.5 text-brand-500"></i>
+                            </div>
+                            <p class="text-xs text-slate-500 leading-snug">Baarish aane wali hai. Cement aur saaman cover kar lein.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="screen-hirer-home" class="px-5 pt-5 space-y-5 hidden animate-fade-in">
+                
+                <div class="bg-white p-2 rounded-full shadow-sm border border-slate-200 flex items-center">
+                    <div class="bg-slate-100 p-2 rounded-full ml-1"><i data-lucide="search" class="w-4 h-4 text-slate-500"></i></div>
+                    <input type="text" placeholder="Search Mason, Electrician..." class="flex-1 bg-transparent px-3 text-sm focus:outline-none">
+                    <button class="bg-slate-900 text-white px-5 py-2.5 rounded-full text-xs font-bold active:scale-95 transition-transform" onclick="showToast('Searching database...')">Find</button>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-1">Live Workers</p>
+                        <h3 class="text-2xl font-black text-slate-900">142<span class="text-success-500 text-sm ml-1">●</span></h3>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-1">Active Escrow</p>
+                        <h3 class="text-2xl font-black text-slate-900">₹4.2k</h3>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-extrabold text-sm text-slate-900 mb-3 px-1">Ready to Hire Now</h3>
+                    
+                    <div class="bg-white p-4 rounded-[24px] border border-slate-200 shadow-sm mb-3 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-success-500 text-white text-[9px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">Matched via LLM</div>
+                        <div class="flex items-center gap-4 mt-2 mb-3">
+                            <img src="https://i.pravatar.cc/150?img=33" class="w-12 h-12 rounded-full object-cover">
+                            <div>
+                                <h4 class="font-extrabold text-slate-900 text-sm">Ramesh Bhai</h4>
+                                <p class="text-[11px] text-slate-500 font-medium">Expert Mason • 0.5 km</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="flex-1 py-2.5 border border-slate-200 text-slate-700 rounded-xl font-bold text-xs flex justify-center items-center gap-2 active:bg-slate-50" onclick="showToast('Calling Ramesh...')">
+                                <i data-lucide="phone" class="w-3.5 h-3.5"></i> Call
+                            </button>
+                            <button class="flex-1 py-2.5 bg-brand-600 text-white rounded-xl font-bold text-xs flex justify-center items-center gap-2 active:scale-95 transition-transform shadow-md" onclick="showBookingSuccess()">
+                                Book Direct
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="screen-jobs" class="hidden px-5 py-10 text-center animate-fade-in">
+                <div class="w-20 h-20 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-4 text-brand-600"><i data-lucide="briefcase" class="w-8 h-8"></i></div>
+                <h2 class="text-xl font-bold text-slate-900">Job History</h2>
+                <p class="text-sm text-slate-500 mt-2">Past bookings and verified work history will appear here.</p>
+            </div>
+            
+            <div id="screen-wallet" class="hidden px-5 py-10 text-center animate-fade-in">
+                <div class="w-20 h-20 bg-success-100 rounded-full flex items-center justify-center mx-auto mb-4 text-success-600"><i data-lucide="wallet" class="w-8 h-8"></i></div>
+                <h2 class="text-xl font-bold text-slate-900">Digital Wallet</h2>
+                <p class="text-sm text-slate-500 mt-2">Full ledger of your earnings, escrow payments, and bank transfers.</p>
+            </div>
+
+            <div id="screen-profile" class="hidden px-5 py-10 text-center animate-fade-in">
+                <img src="https://i.pravatar.cc/150?img=11" class="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-white shadow-md">
+                <h2 class="text-xl font-bold text-slate-900">Pratham Kumar Singh</h2>
+                <p class="text-sm text-slate-500 font-medium">B.Tech AI & DS (Creator)</p>
+                <button class="mt-6 border border-slate-300 px-6 py-2 rounded-full font-bold text-xs" onclick="showToast('Settings opened')">Edit Profile</button>
+            </div>
+
+        </main>
+
+        <nav class="absolute bottom-0 w-full glass-dark pb-6 pt-3 px-6 z-50 rounded-b-[40px]">
+            <div class="flex justify-between items-center relative">
+                <div id="nav-indicator" class="absolute top-0 left-[8%] w-1.5 h-1.5 bg-brand-400 rounded-full transition-all duration-300"></div>
+                
+                <button onclick="navTo('home', 0)" class="nav-btn text-brand-400 flex flex-col items-center gap-1.5 w-16 pt-2">
+                    <i data-lucide="home" class="w-5 h-5"></i>
+                    <span class="text-[9px] font-bold">Home</span>
+                </button>
+                <button onclick="navTo('jobs', 1)" class="nav-btn text-slate-400 hover:text-white flex flex-col items-center gap-1.5 w-16 pt-2 transition-colors">
+                    <i data-lucide="briefcase" class="w-5 h-5"></i>
+                    <span class="text-[9px] font-bold">Jobs</span>
+                </button>
+                <button onclick="navTo('wallet', 2)" class="nav-btn text-slate-400 hover:text-white flex flex-col items-center gap-1.5 w-16 pt-2 transition-colors">
+                    <i data-lucide="wallet" class="w-5 h-5"></i>
+                    <span class="text-[9px] font-bold">Khata</span>
+                </button>
+                <button onclick="navTo('profile', 3)" class="nav-btn text-slate-400 hover:text-white flex flex-col items-center gap-1.5 w-16 pt-2 transition-colors">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                    <span class="text-[9px] font-bold">Profile</span>
+                </button>
+            </div>
+            <div class="w-1/3 h-1 bg-slate-500 rounded-full mx-auto mt-4"></div>
+        </nav>
+
+        <div id="toast" class="absolute top-14 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none z-[150] whitespace-nowrap">
+            Message goes here
+        </div>
+
+        <div id="modal-backdrop" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-[110] hidden opacity-0 transition-opacity">
+            <div id="modal-content" class="absolute bottom-0 w-full bg-white rounded-t-[32px] p-6 shadow-2xl translate-y-full transition-transform duration-300">
+                <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6"></div>
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-brand-50 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-3"><i data-lucide="landmark" class="w-8 h-8"></i></div>
+                    <h3 class="text-xl font-extrabold text-slate-900">Withdraw Funds</h3>
+                    <p class="text-sm text-slate-500 mt-1">Transfer ₹850 to verified Bank A/C</p>
+                </div>
+                <button onclick="confirmWithdraw()" id="btn-confirm" class="w-full bg-brand-600 text-white py-3.5 rounded-xl font-extrabold text-sm active:scale-95 transition-all flex justify-center items-center gap-2">
+                    Confirm Transfer
+                </button>
+                <button onclick="closeModal()" class="w-full text-slate-500 py-3 mt-2 font-bold text-xs">Cancel</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+        let currentRole = 'worker';
+
+        // 1. Splash Screen Logic
+        window.onload = () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                splash.style.opacity = '0';
+                setTimeout(() => splash.remove(), 500);
+            }, 1500);
+        };
+
+        // 2. Role Switcher (Worker <-> Hirer)
+        function switchRole(role) {
+            currentRole = role;
+            const workerBtn = document.getElementById('btn-worker');
+            const hirerBtn = document.getElementById('btn-hirer');
+            const slider = document.getElementById('role-slider');
+            
+            // Re-route to Home when switching roles
+            navTo('home', 0);
+
+            if(role === 'worker') {
+                slider.style.transform = 'translateX(0)';
+                workerBtn.classList.replace('text-slate-400', 'text-brand-900');
+                hirerBtn.classList.replace('text-brand-900', 'text-slate-400');
+                document.getElementById('screen-worker-home').classList.remove('hidden');
+                document.getElementById('screen-hirer-home').classList.add('hidden');
+            } else {
+                slider.style.transform = 'translateX(100%)';
+                hirerBtn.classList.replace('text-slate-400', 'text-brand-900');
+                workerBtn.classList.replace('text-brand-900', 'text-slate-400');
+                document.getElementById('screen-hirer-home').classList.remove('hidden');
+                document.getElementById('screen-worker-home').classList.add('hidden');
+            }
+        }
+
+        // 3. Bottom Navigation Logic
+        function navTo(screen, index) {
+            // Update UI Dot
+            const dotPositions = ['8%', '33%', '62%', '88%'];
+            document.getElementById('nav-indicator').style.left = dotPositions[index];
+
+            // Update Icon Colors
+            const btns = document.querySelectorAll('.nav-btn');
+            btns.forEach((btn, i) => {
+                if(i === index) {
+                    btn.classList.replace('text-slate-400', 'text-brand-400');
+                } else {
+                    btn.classList.replace('text-brand-400', 'text-slate-400');
+                }
+            });
+
+            // Hide all screens
+            const screens = ['screen-worker-home', 'screen-hirer-home', 'screen-jobs', 'screen-wallet', 'screen-profile'];
+            screens.forEach(s => {
+                const el = document.getElementById(s);
+                if(el) el.classList.add('hidden');
+            });
+
+            // Show selected screen
+            if(screen === 'home') {
+                document.getElementById(currentRole === 'worker' ? 'screen-worker-home' : 'screen-hirer-home').classList.remove('hidden');
+            } else {
+                document.getElementById(`screen-${screen}`).classList.remove('hidden');
+            }
+            
+            // Scroll to top
+            document.getElementById('main-scroll').scrollTop = 0;
+        }
+
+        // 4. Toast Notification Engine
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.classList.remove('opacity-0');
+            setTimeout(() => toast.classList.add('opacity-0'), 2000);
+        }
+
+        // 5. Modal Engine (Withdraw)
+        function openWithdrawModal() {
+            const backdrop = document.getElementById('modal-backdrop');
+            const content = document.getElementById('modal-content');
+            backdrop.classList.remove('hidden');
+            // Small delay to allow display:block to apply before animating opacity/transform
+            setTimeout(() => {
+                backdrop.classList.remove('opacity-0');
+                content.style.transform = 'translateY(0)';
+            }, 10);
+        }
+
+        function closeModal() {
+            const backdrop = document.getElementById('modal-backdrop');
+            const content = document.getElementById('modal-content');
+            backdrop.classList.add('opacity-0');
+            content.style.transform = 'translateY(100%)';
+            setTimeout(() => backdrop.classList.add('hidden'), 300);
+            
+            // Reset button if it was clicked
+            const btn = document.getElementById('btn-confirm');
+            btn.innerHTML = 'Confirm Transfer';
+            btn.classList.replace('bg-success-600', 'bg-brand-600');
+        }
+
+        function confirmWithdraw() {
+            const btn = document.getElementById('btn-confirm');
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Processing...';
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                btn.classList.replace('bg-brand-600', 'bg-success-600');
+                btn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> Sent Successfully!';
+                lucide.createIcons();
+                setTimeout(() => closeModal(), 1500);
+            }, 1500);
+        }
+
+        function showBookingSuccess() {
+            showToast("Requirement sent! Waiting for Worker.");
+        }
+
+        // 6. The Shark Tank Pitch Logic: AI Voice Simulation
+        function activateAIPitch() {
+            const micBtn = document.getElementById('ai-mic');
+            const icon = document.getElementById('mic-icon');
+            const waves = document.getElementById('sound-waves');
+            const status = document.getElementById('ai-status');
+            const subtext = document.getElementById('ai-subtext');
+            const jsonBox = document.getElementById('llm-json-box');
+            const r1 = document.getElementById('mic-ripple-1');
+            const r2 = document.getElementById('mic-ripple-2');
+            const statusDot = document.getElementById('status-dot');
+
+            // --- State 1: Active Listening (Wave Animation) ---
+            micBtn.classList.replace('bg-brand-600', 'bg-red-500');
+            icon.classList.add('hidden');
+            waves.classList.remove('hidden');
+            status.innerText = "Sunaai de raha hai...";
+            subtext.innerText = "Speak in Hindi or Regional Language";
+            jsonBox.classList.add('hidden');
+            
+            // Turn on dynamic island mic indicator and ripples
+            statusDot.classList.remove('opacity-0');
+            r1.classList.remove('opacity-0'); r1.classList.add('scale-150');
+            r2.classList.remove('opacity-0'); r2.classList.add('scale-150');
+
+            setTimeout(() => {
+                // --- State 2: LLM Processing ---
+                micBtn.classList.replace('bg-red-500', 'bg-slate-800');
+                waves.classList.add('hidden');
+                icon.classList.remove('hidden');
+                icon.setAttribute('data-lucide', 'cpu');
+                icon.classList.add('animate-pulse');
+                lucide.createIcons();
+                
+                status.innerText = "Gen AI Processing...";
+                subtext.innerText = "Extracting details via LLM...";
+                
+                // Turn off indicators
+                statusDot.classList.add('opacity-0');
+                r1.classList.add('opacity-0', 'scale-50'); r1.classList.remove('scale-150');
+                r2.classList.add('opacity-0', 'scale-50'); r2.classList.remove('scale-150');
+
+                setTimeout(() => {
+                    // --- State 3: Result Captured ---
+                    micBtn.classList.replace('bg-slate-800', 'bg-brand-600');
+                    icon.classList.remove('animate-pulse');
+                    icon.setAttribute('data-lucide', 'check');
+                    lucide.createIcons();
+                    
+                    status.innerText = "Requirement Captured!";
+                    subtext.innerText = "Contractors notified.";
+                    jsonBox.classList.remove('hidden');
+
+                    document.getElementById('main-scroll').scrollTo({ top: 500, behavior: 'smooth' });
+
+                    // Reset
+                    setTimeout(() => {
+                        icon.setAttribute('data-lucide', 'mic');
+                        lucide.createIcons();
+                        status.innerText = "Tap & Speak";
+                        subtext.innerText = "\"Mujhe site par tile lagane ka kaam chahiye\"";
+                        jsonBox.classList.add('hidden');
+                    }, 5000);
+
+                }, 2000);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
